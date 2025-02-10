@@ -1,13 +1,11 @@
 1. Install Required Packages
-bash
-Copy
-Edit
+
 pip install requests
 pip install python-artifactory
-2. Authentication and Basic API Request Using requests
+
+3. Authentication and Basic API Request Using requests
 python
-Copy
-Edit
+
 import requests
 
 # Define JFrog Artifactory details
@@ -39,21 +37,21 @@ with open(file_path, "rb") as file:
 if response.status_code == 201:
     print("File uploaded successfully!")
 else:
-    print("Upload failed:", response.text)
+    print("Upload failed:", response.text
+
+
 4. List Artifacts in a Repository
-python
-Copy
-Edit
+
 response = requests.get(f"{JFROG_URL}api/storage/{REPO_NAME}", auth=auth)
 
 if response.status_code == 200:
     print("Artifacts:", response.json())
 else:
     print("Error:", response.text)
+
+    
 5. Using artifactory Python Package (Alternative)
-python
-Copy
-Edit
+
 from artifactory import ArtifactoryPath
 
 artifactory_url = "https://your-jfrog-instance.jfrog.io/artifactory/example-repo-local/"
@@ -83,18 +81,15 @@ Can we download screen shot of jfrog api thorugh python
 ChatGPT said:
 If you want to take a screenshot of the JFrog API response or the JFrog UI, you can use Python with Selenium or Pyppeteer (a headless browser automation tool).
 
+
 1. Install Required Packages
-bash
-Copy
-Edit
 pip install selenium webdriver-manager
 pip install pyppeteer
-2. Using Selenium to Capture JFrog UI Screenshot
-If you want to capture a screenshot of the JFrog Web UI, you can use Selenium with Chrome WebDriver:
 
-python
-Copy
-Edit
+
+3. Using Selenium to Capture JFrog UI Screenshot
+If you want to capture a screenshot of the JFrog Web UI, you can use Selenium with Chrome WebDriver:
+ 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -118,12 +113,11 @@ print(f"Screenshot saved as {screenshot_path}")
 
 # Close the browser
 driver.quit()
+
+
 3. Using Pyppeteer to Capture Screenshot of JFrog UI
 Pyppeteer is a lightweight alternative to Selenium:
 
-python
-Copy
-Edit
 import asyncio
 from pyppeteer import launch
 
@@ -147,10 +141,7 @@ async def take_screenshot():
 asyncio.run(take_screenshot())
 4. Taking a Screenshot of JFrog API Response
 If you want to capture a screenshot of the JSON response from the JFrog API:
-
-python
-Copy
-Edit
+ 
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
@@ -193,26 +184,17 @@ Screenshot of JFrog API Response	Convert JSON to Image with PIL
 Would you like further improvements, such as adding login automation for private JFrog instances?
 
 
-
-
-
-
-
 You said:
 Confluence api through python
 ChatGPT said:
 To interact with Atlassian Confluence API using Python, you can use the requests library or the atlassian-python-api package.
 
 1. Install Required Packages
-bash
-Copy
-Edit
+ 
 pip install requests
 pip install atlassian-python-api
 2. Authentication and Basic API Request Using requests
-python
-Copy
-Edit
+ 
 import requests
 import json
 
@@ -232,9 +214,7 @@ if response.status_code == 200:
 else:
     print("Error:", response.text)
 3. Create a New Page in Confluence
-python
-Copy
-Edit
+ 
 page_data = {
     "type": "page",
     "title": "My API Created Page",
@@ -255,9 +235,7 @@ if response.status_code == 200 or response.status_code == 201:
 else:
     print("Error:", response.text)
 4. Update an Existing Page
-python
-Copy
-Edit
+ 
 # Get the page ID first
 PAGE_ID = "123456"  # Replace with your actual page ID
 
@@ -288,9 +266,7 @@ if response.status_code == 200:
 else:
     print("Error:", response.text)
 5. Using atlassian-python-api (Alternative)
-python
-Copy
-Edit
+ 
 from atlassian import Confluence
 
 confluence = Confluence(
@@ -316,21 +292,13 @@ Use an API token instead of a password for security.
 Ensure your account has the necessary permissions.
 Would you like additional features like adding attachments, comments, or searching pages?
 
-
-
-
-
-
-
 You said:
 Bitbucket api to get review report 
 ChatGPT said:
 To generate a Bitbucket Pull Request Review Report using Python, you can interact with the Bitbucket API to fetch pull request data, reviewers, approvals, and comments.
 
 1. Install Required Packages
-bash
-Copy
-Edit
+ 
 pip install requests pandas
 2. Authenticate and Fetch Pull Requests
 Bitbucket provides two types of authentication:
@@ -341,9 +309,7 @@ Use App Password for authentication, which can be created in Bitbucket under:
 Personal Settings → App Passwords.
 
 Get Pull Requests and Review Data
-python
-Copy
-Edit
+ 
 import requests
 import json
 import pandas as pd
@@ -427,11 +393,6 @@ Generate an Excel report with formatting.
 Would you like me to improve it further, such as integrating Jira ticket links or graphical analysis?
 
 
-
-
-
-
-
 You said:
 Access bitbucket with access token using python
 ChatGPT said:
@@ -446,12 +407,11 @@ How to Get an OAuth 2.0 Access Token
 Go to Bitbucket Settings → OAuth Consumers.
 Create a new OAuth consumer and enable scopes (e.g., repository read/write).
 Use the Client ID and Client Secret to get an access token.
+
 2. Obtain an Access Token via OAuth
 Run the following script to get an access token using your Client ID and Client Secret:
 
-python
-Copy
-Edit
+ 
 import requests
 
 # Bitbucket OAuth credentials
@@ -474,12 +434,11 @@ if response.status_code == 200:
     print("Access Token:", ACCESS_TOKEN)
 else:
     print("Error:", response.text)
+
+    
 3. Use Access Token to Call Bitbucket API
 Once you have the access token, you can use it to authenticate API requests:
-
-python
-Copy
-Edit
+ 
 import requests
 
 # Use the access token obtained earlier
@@ -502,15 +461,15 @@ if response.status_code == 200:
     print(response.json())  # List of repositories
 else:
     print("Error:", response.text)
+
+
 4. Alternative: Using Repository Access Token
 If you prefer repository access tokens (instead of OAuth), follow these steps:
 
 Go to Bitbucket → Repository Settings → Access Tokens.
 Generate a repository token with desired permissions.
 Use it as a Bearer token:
-python
-Copy
-Edit
+ 
 headers = {
     "Authorization": "Bearer your-repository-access-token",
     "Content-Type": "application/json",
