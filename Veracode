@@ -1,0 +1,68 @@
+pip install requests veracode-api-signing
+
+import requests
+import json
+from veracode_api_signing.plugin_requests import RequestsAuthPluginVeracodeHMAC
+
+# Veracode API Credentials (HARD-CODED)
+VERACODE_API_KEY_ID = "your_api_key_id"
+VERACODE_API_KEY_SECRET = "your_api_key_secret"
+
+# Veracode API endpoint for file upload
+UPLOAD_URL = "https://api.veracode.com/appsec/v1/applications/{app_id}/sandboxes/{sandbox_id}/files"
+
+# Replace with your Veracode application and sandbox IDs
+APP_ID = "your_application_id"
+SANDBOX_ID = "your_sandbox_id"
+FILE_PATH = "path/to/your/file.zip"
+
+class CustomVeracodeHMAC(RequestsAuthPluginVeracodeHMAC):
+    def __init__(self, api_key_id, api_key_secret):
+        self.api_key_id = api_key_id
+        self.api_key_secret = api_key_secret
+        super().__init__()
+
+    def get_credentials(self):
+        return self.api_key_id, self.api_key_secret
+
+def upload_file():
+    with open(FILE_PATH, "rb") as file:
+        files = {"file": (FILE_PATH, file, "application/zip")}
+        headers = {"Accept": "application/json"}
+
+        response = requests.post(
+            UPLOAD_URL.format(app_id=APP_ID, sandbox_id=SANDBOX_ID),
+            headers=headers,
+            files=files,
+            auth=CustomVeracodeHMAC(VERACODE_API_KEY_ID, VERACODE_API_KEY_SECRET)
+        )
+
+        if response.status_code == 201:
+            print("File uploaded successfully.")
+        else:
+            print(f"Error: {response.status_code}, {response.text}")
+
+if __name__ == "__main__":
+    upload_file()
+
+
+SCAN_URL = "https://api.veracode.com/appsec/v1/applications/{app_id}/sandboxes/{sandbox_id}/scans"
+
+def start_scan():
+    headers = {"Accept": "application/json"}
+    data = json.dumps({"scan_type": "STATIC"})
+
+    response = requests.post(
+        SCAN_URL.format(app_id=APP_ID, sandbox_id=SANDBOX_ID),
+        headers=headers,
+        data=data,
+        auth=CustomVeracodeHMAC(VERACODE_API_KEY_ID, VERACODE_API_KEY_SECRET)
+    )
+
+    if response.status_code == 201:
+        print("Scan started successfully.")
+    else:
+        print(f"Error: {response.status_code}, {response.text}")
+
+if __name__ == "__main__":
+    start_scan()
