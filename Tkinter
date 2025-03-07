@@ -1,0 +1,102 @@
+import customtkinter as ctk
+
+# Initialize main app
+ctk.set_appearance_mode("Dark")  # Options: "Light", "Dark", "System"
+ctk.set_default_color_theme("blue")  # Default theme
+
+class AdminPanel(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("Admin Panel")
+        self.geometry("800x500")
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+        # Left Panel (Navigation)
+        self.left_panel = ctk.CTkFrame(self, width=200, corner_radius=0)
+        self.left_panel.grid(row=0, column=0, sticky="nswe")
+        self.left_panel.grid_rowconfigure(4, weight=1)  # Push buttons up
+
+        self.btn_release_component = ctk.CTkButton(self.left_panel, text="Release Component", command=self.show_release_component)
+        self.btn_release_component.grid(row=0, column=0, padx=20, pady=10, sticky="ew")
+
+        self.btn_settings = ctk.CTkButton(self.left_panel, text="Settings", command=self.show_settings)
+        self.btn_settings.grid(row=1, column=0, padx=20, pady=10, sticky="ew")
+
+        # Right Panel (Content)
+        self.right_panel = ctk.CTkFrame(self)
+        self.right_panel.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
+        self.right_panel.grid_columnconfigure(0, weight=1)
+        self.right_panel.grid_rowconfigure(0, weight=1)
+
+        self.active_frame = None
+        self.show_release_component()  # Show the first screen by default
+
+    def show_release_component(self):
+        """Switch to the Release Component screen."""
+        self.clear_right_panel()
+
+        # Create Frame for Release Component
+        self.release_frame = ctk.CTkFrame(self.right_panel)
+        self.release_frame.pack(fill="both", expand=True)
+
+        # Button to add rows
+        self.add_row_btn = ctk.CTkButton(self.release_frame, text="Add Row", command=self.add_row)
+        self.add_row_btn.pack(pady=10)
+
+        # Table Frame
+        self.table_frame = ctk.CTkFrame(self.release_frame)
+        self.table_frame.pack(fill="both", expand=True)
+
+        self.row_count = 0
+        self.rows = []
+
+    def add_row(self):
+        """Add a new row with dropdown input."""
+        row_frame = ctk.CTkFrame(self.table_frame)
+        row_frame.pack(fill="x", pady=5)
+
+        dropdown = ctk.CTkComboBox(row_frame, values=["Test 1", "Test 2", "Test 3"])
+        dropdown.pack(side="left", padx=5)
+
+        self.rows.append(row_frame)
+
+    def show_settings(self):
+        """Switch to the Settings screen."""
+        self.clear_right_panel()
+
+        # Create Frame for Settings
+        self.settings_frame = ctk.CTkFrame(self.right_panel)
+        self.settings_frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+        # Jira API Key
+        self.jira_frame = ctk.CTkFrame(self.settings_frame)
+        self.jira_frame.pack(fill="x", pady=10)
+        ctk.CTkLabel(self.jira_frame, text="Jira API Key:").pack(side="left", padx=10)
+        self.jira_entry = ctk.CTkEntry(self.jira_frame, width=300)
+        self.jira_entry.pack(side="left", padx=10)
+
+        # Veracode API Key
+        self.veracode_frame = ctk.CTkFrame(self.settings_frame)
+        self.veracode_frame.pack(fill="x", pady=10)
+        ctk.CTkLabel(self.veracode_frame, text="Veracode API Key:").pack(side="left", padx=10)
+        self.veracode_entry = ctk.CTkEntry(self.veracode_frame, width=300)
+        self.veracode_entry.pack(side="left", padx=10)
+
+        # Bitbucket API Key
+        self.bitbucket_frame = ctk.CTkFrame(self.settings_frame)
+        self.bitbucket_frame.pack(fill="x", pady=10)
+        ctk.CTkLabel(self.bitbucket_frame, text="Bitbucket API Key:").pack(side="left", padx=10)
+        self.bitbucket_entry = ctk.CTkEntry(self.bitbucket_frame, width=300)
+        self.bitbucket_entry.pack(side="left", padx=10)
+
+    def clear_right_panel(self):
+        """Remove the active frame from the right panel."""
+        for widget in self.right_panel.winfo_children():
+            widget.destroy()
+
+# Run App
+if __name__ == "__main__":
+    app = AdminPanel()
+    app.mainloop()
