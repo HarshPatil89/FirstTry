@@ -1,0 +1,116 @@
+import customtkinter as ctk
+
+class ReleaseComponentFrame(ctk.CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        self.rows = []
+        
+        # Header
+        self.add_button = ctk.CTkButton(self, text="Add Row", command=self.add_row)
+        self.add_button.pack(pady=10)
+        
+        # Table frame
+        self.table_frame = ctk.CTkScrollableFrame(self)
+        self.table_frame.pack(expand=True, fill="both")
+        
+        # Initial row
+        self.add_row()
+
+    def add_row(self):
+        row_number = len(self.rows) + 1
+        row_frame = ctk.CTkFrame(self.table_frame)
+        row_frame.pack(fill="x", pady=2)
+        
+        # Components
+        test_label = ctk.CTkLabel(row_frame, text=f"Test {row_number}:")
+        test_label.pack(side="left", padx=5)
+        
+        test_dropdown = ctk.CTkComboBox(
+            row_frame,
+            values=["Unit Test", "Integration Test", "System Test", "Acceptance Test"]
+        )
+        test_dropdown.pack(side="left", padx=5)
+        
+        self.rows.append(row_frame)
+
+class SettingsFrame(ctk.CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        
+        # Jira Settings
+        jira_frame = ctk.CTkFrame(self)
+        jira_frame.pack(pady=10, padx=20, fill="x")
+        ctk.CTkLabel(jira_frame, text="Jira API Configuration").pack(anchor="w")
+        self.jira_api_entry = ctk.CTkEntry(jira_frame, placeholder_text="Jira API Key")
+        self.jira_api_entry.pack(pady=5, fill="x")
+        
+        # Veracode Settings
+        veracode_frame = ctk.CTkFrame(self)
+        veracode_frame.pack(pady=10, padx=20, fill="x")
+        ctk.CTkLabel(veracode_frame, text="Veracode API Configuration").pack(anchor="w")
+        self.veracode_api_entry = ctk.CTkEntry(veracode_frame, placeholder_text="Veracode API Key")
+        self.veracode_api_entry.pack(pady=5, fill="x")
+        
+        # Bitbucket Settings
+        bitbucket_frame = ctk.CTkFrame(self)
+        bitbucket_frame.pack(pady=10, padx=20, fill="x")
+        ctk.CTkLabel(bitbucket_frame, text="Bitbucket API Configuration").pack(anchor="w")
+        self.bitbucket_api_entry = ctk.CTkEntry(bitbucket_frame, placeholder_text="Bitbucket API Key")
+        self.bitbucket_api_entry.pack(pady=5, fill="x")
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Admin Panel")
+        self.geometry("1000x600")
+        
+        # Configure grid layout
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        
+        # Left navigation panel
+        self.navigation_frame = ctk.CTkFrame(self, corner_radius=0)
+        self.navigation_frame.grid(row=0, column=0, sticky="nsew")
+        
+        # Navigation buttons
+        self.release_btn = ctk.CTkButton(
+            self.navigation_frame,
+            text="Release Component",
+            command=self.show_release_component
+        )
+        self.release_btn.pack(pady=10, padx=10, fill="x")
+        
+        self.settings_btn = ctk.CTkButton(
+            self.navigation_frame,
+            text="Settings",
+            command=self.show_settings
+        )
+        self.settings_btn.pack(pady=10, padx=10, fill="x")
+        
+        # Right content area
+        self.right_frame = ctk.CTkFrame(self, corner_radius=0)
+        self.right_frame.grid(row=0, column=1, sticky="nsew")
+        
+        # Create screens
+        self.release_component = ReleaseComponentFrame(self.right_frame)
+        self.settings = SettingsFrame(self.right_frame)
+        
+        # Show default screen
+        self.show_release_component()
+
+    def show_screen(self, screen):
+        self.release_component.pack_forget()
+        self.settings.pack_forget()
+        screen.pack(expand=True, fill="both", padx=20, pady=20)
+
+    def show_release_component(self):
+        self.show_screen(self.release_component)
+
+    def show_settings(self):
+        self.show_screen(self.settings)
+
+if __name__ == "__main__":
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("blue")
+    app = App()
+    app.mainloop()
